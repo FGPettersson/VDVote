@@ -1,0 +1,259 @@
+#runnerList li span
+{
+    width: 210px;
+}
+#runnerList li:first-child
+{
+    border-top:0px;
+}
+#runnerList li img
+{
+    float: right;
+    margin: 8px 10px 8px 0px;
+    opacity: 0;
+    width: 24px;
+    height: 100%;
+}
+#runnerList li:hover img
+{
+    opacity: 1;
+    cursor: pointer;
+}
+input[type=text]
+{
+    height: 38px;
+    padding-left: 10px;
+    font-size: 14px;
+    font-family: Book Antiqua;
+}
+input[type=text]:not(.shortInput)
+{
+    width: 245px;
+}    
+label
+{
+    position: relative;
+}
+label span
+{
+    position: absolute;
+    left: 270px;
+    top: 2px;
+    text-transform: uppercase;
+    font-family: century gothic;
+    color: #aaa;
+    visibility: hidden;
+    font-size: 14px;
+}
+/*label:hover span, */
+input:focus + span, textarea:focus + span
+{
+    visibility: visible;
+}
+#numberOfSeatsAndBackups
+{
+    display: inline-block;
+    height: 42px;
+    font-size: 14px;
+    font-family: Book Antiqua;
+    background: #fff;
+    position: relative;
+    margin-left: 45px;
+    border: 1px solid #ccc;
+    float: left;
+}
+#numberOfSeatsAndBackups label
+{
+    float: left;
+    margin: 2px;
+    position: static;
+}
+#numberOfSeatsAndBackups label span
+{
+    left: 225px;
+}
+#numberOfSeatsAndBackups input
+{
+    border: 0px solid #fff;
+    text-align: center;
+    padding: 0px;
+    height: 38px;
+    width: 38px;
+}
+
+#numberOfSeatsAndBackups img
+{
+    position: absolute;
+    left: -38px;
+    top: 7px;
+    width: 24px;
+    height: 24px;
+}
+#majorityInput
+{
+    float: left;
+    margin-left: 74px;
+    padding: 0px;
+    position: relative;
+}
+#majorityInput input
+{
+    width: 50px;
+    text-align: center;
+    padding-left: 0px;
+}
+#majorityInput img
+{
+    position: absolute;
+    left: -36px;
+    top: -3px;
+    width: 24px;
+    height: 24px;
+}
+#majorityInput label span
+{
+    left: 66px;
+}
+#eDescSpan
+{
+    top: -95px;
+}
+#e-numberOfBackups
+{
+    /*color: #999;*/
+    font-size: 0.8em;
+}
+.inputRightImage
+{
+    position: absolute;
+    right: 14px;
+    top: -2px;
+}
+.textareaRightImage
+{
+    position: absolute;
+    right: 14px;
+    top: -100px;
+}
+.shortInput
+{
+    width: 30px;
+}
+textarea
+{
+    font-size: 14px;
+    font-family: Book Antiqua;
+    padding: 10px;
+    width: 208px;
+    height: 100px;
+    resize: none;
+    margin: 6px 0px 4px;
+    border: 1px solid #ccc;
+    padding-right: 40px;
+}
+li
+{
+    list-style: none;
+    display: block;
+    border-top: 1px solid white;
+}
+li a
+{
+    display: inline-block;
+    padding: 10px;
+    margin: 0px;
+    text-decoration: none;
+    width: 240px;
+}
+li:hover
+{
+    background-color: #acf;
+}
+li h3
+{
+    margin: 0px 0px 5px;
+    text-align: left;
+}
+li p
+{
+    color: #003c8d;
+}
+#electionInfo
+{
+    margin-top: 10px;
+    margin-left: 0px;
+    width: 260px;
+    float: right;
+}
+#electionInfo input[type=text]
+{
+    font-family: Century gothic;
+    font-weight: bold;
+}
+.buttonStyle
+{
+    display: inline-block;
+    width: 150px;
+    height: 40px;
+    line-height: 40px;
+    margin: 10px auto 0px auto;
+    text-align: center;
+    vertical-align: middle;
+    background-color: #669966;
+    border: 2px solid black;
+    font-family: century gothic;
+    font-weight: bold;
+    text-decoration: none;
+    color: white;
+}
+#voteLink
+{
+    position: absolute;
+}
+.buttonStyle:hover
+{
+    background-color: #33bb33;
+}
+#updateStatus
+{
+    display: inline-block;
+    font-size: 12px;
+    height: 16px;
+    line-height: 16px;
+    position: relative;
+    padding: 5px;
+    padding-left: 25px;
+    margin-top: 3px;
+    border: 1px solid black;
+    opacity: 0.7;   
+    border-radius: 3px;
+    margin-top: 10px;
+    width: 225px;
+}
+#updateStatus.notUsed
+{
+    opacity: 0 !important;
+}
+#updateStatus img
+{
+    position: absolute;
+    top: 5px;
+    left: 5px;
+}
+#updateStatus.updateOK
+{
+    background: green;
+    color: white;
+    opacity: 0.7; 
+    visibility: visible;
+    -webkit-transition: visibility 2s, background 0.1s; /* Safari */
+    transition: visibility 2s, background 0.1s;
+}
+#updateStatus.notUpdated
+{
+    background: yellow;
+    opacity: 0.5; 
+    visibility: visible;
+    -webkit-transition: visibility 2s, background 0.2s; /* Safari */
+    transition: visibility 2s, background 0.2s;
+}

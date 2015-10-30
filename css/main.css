@@ -1,0 +1,257 @@
+html, body { height: 100%; }
+/*body > #container { height: auto; min-height: 100%; }*/
+
+body
+{
+    background: #edefee url("../img/bg.png") repeat;
+}
+#main
+{
+    font-family: Book Antiqua;
+    margin: 20px auto 0px;  
+    width: 940px;
+    padding-top: 5px;
+    /*margin-bottom: 65px;*/
+}
+h1, h2, h3, h4
+{
+    font-family: Century Gothic;
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: bold;
+    color: #006cad;
+}
+h1
+{
+    font-size: 24px;
+    /*padding-bottom: 40px;*/
+/*    border-bottom: 2px dashed #edefee;*/
+    color: #edefee;
+    display: block;
+    width: -moz-min-content;
+    width: -webkit-min-content;
+    width: min-content;;
+    margin: 0px auto;
+    white-space: nowrap;
+    float: right;
+    position: absolute;
+    top: 15px;
+    right: 26px;
+}
+h2
+{
+    margin-top: 30px;
+    margin-bottom: 20px;
+    font-size: 22px;
+}
+header
+{
+    width: 100%;
+    background-color: #006cad;
+    padding: 50px 0px 10px;
+    height: 32px;
+}
+
+footer
+{
+    width: 100%;
+    background-color: #006cad;
+    clear: both;
+    position: relative;
+    z-index: 10;
+    height: 15px;
+    margin: -120px auto 0px;
+    text-align: center;
+    padding: 20px 0px;
+    line-height: 100%
+}
+footer a
+{
+    font-family: Century Gothic;
+    text-align: center;
+    color: #edefee;
+    text-decoration: none;
+    background: none;
+}
+footer a:hover
+{
+    color: #cdcfce;
+/*    text-shadow: 0px 0px 2px #000;
+    -webkit-text-shadow: 0px 0px 2px #000;
+    -moz-text-shadow: 0px 0px 2px #000;
+*/}
+nav
+{
+    padding: 20px;    
+    border-top: 1px solid #006cad;
+    background-color: white;
+}
+.shaded
+{
+    box-shadow: 0px 0px 15px #aaa;
+    -webkit-box-shadow: 0px 0px 15px #aaa;
+    -moz-box-shadow: 0px 0px 15px #aaa;
+}
+.clear
+{
+    clear: both;
+    content: " ";
+}
+.lfloat
+{
+    float: left;
+}
+.rfloat
+{
+    float: right;
+}
+.centerBox
+{
+    width: 60%;
+    margin: 0px auto 0px;
+}
+.hfont
+{
+    font-family: century Gothic;
+    font-weight: bold;
+}
+.relative
+{
+    position: relative;
+}
+.myList
+{
+    width: 260px;
+    display: inline-block;
+    background-color: #cdf;
+    border: 2px solid #006cad;
+    -moz-border-radius: 3px;
+    border-radius:  3px;
+    margin: 5px;
+}
+.myList h2 
+{
+    background-color: #006cad;
+    color: #edefee;
+    margin: 0px;
+    padding: 20px 0px;
+}
+.myList li
+{
+    list-style: none;
+    display: block;
+    border-top: 1px solid white;
+    min-height: 40px;
+}
+.myList li span /* Is used when simple text is to be shown */
+{
+    display: inline-block;
+    margin: 12px 0px 12px 10px;
+}
+.myList li a
+{
+    display: inline-block;
+    padding: 10px;
+    margin: 0px;
+    text-decoration: none;
+    width: 240px;
+}
+.myList li:hover
+{
+    background-color: #acf;
+}
+.myList li h3
+{
+    margin: 0px 0px 5px;
+    text-align: left;
+}
+.myList li p
+{
+    color: #003c8d;
+}
+.backLink, .delLink
+{
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: -5px;
+    padding: 5px 10px 5px 40px;
+    font-family: century Gothic;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: white;
+    line-height: 30px;
+    height: 30px;
+    position: relative;
+    border-radius: 3px;
+}
+.backLink
+{
+    float: left;
+}
+.backLink:first-of-type
+{
+    margin-left: 15px;
+}
+.backLink:last-of-type
+{
+    margin-right: 15px;
+}
+.delLink:not(#delConfirm)
+{
+    float: right;
+    margin-right: 15px;
+}
+.backLink:hover
+{
+    background: #006;
+}
+.delLink:hover
+{
+    background: #600;
+}
+
+.backLink img, .delLink img
+{
+    position: absolute;
+    top: 8px;
+    left: 10px;
+}
+#delConfirm
+{
+    position: absolute;
+    top: 55px;
+    right: 15px;
+    display: block;
+    width: 240px;
+    height: 80px;
+    background: #000;
+    /*border: 1px solid black;*/
+    font-family: century Gothic;
+    text-align: center;
+    padding: 10px;
+    color: white;
+    border-radius: 3px;
+    z-index: 100;
+    opacity: 10;
+    display: none;
+    opacity: 0.8;
+}
+#delConfirm a
+{
+    display: inline-block;
+    width: 40px;
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
+    background: white;
+    margin-top: 10px;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+#delConfirm a:hover
+{
+    background: #666;
+    color: white;
+    /*border: 1px solid red;*/
+}
+

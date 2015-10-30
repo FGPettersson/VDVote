@@ -1,0 +1,117 @@
+#nodeSpace
+{
+    margin: 20px 10px;
+    position: relative;
+}
+.zfix
+{
+    position: relative;
+    z-index: 5;
+    background: white;
+    border: 1px solid;
+    opacity: 1;
+}
+.node
+{
+    position: absolute;
+    width: 200px;
+    opacity: 1;
+}
+.node table
+{
+    width: 200px;
+}
+.elected
+{
+    background: #33aa33;
+}
+.line
+{
+    border: 1px solid black;
+    z-index: 10;
+}
+.node .elected
+{
+    margin: -;
+    padding: 10px 0px 10px 25px;
+    border-bottom: 1px solid black;
+    margin-bottom: 5px;
+
+}
+.node .stillRunning
+{
+    padding:5px 0px;
+    list-style-type: decimal;
+    margin-left: 25px;
+}
+.node .stillRunning .voteCount
+{
+    position: absolute;
+    right: 10px;
+}
+.node .eliminated
+{
+    padding: 5px 0px;
+    text-decoration: line-through;
+    margin-left: 25px;
+    color: #aaa;
+}
+.probabilityDisplay
+{
+    position: absolute;
+    bottom: -21px;
+    right: 0px;
+    padding: 3px;
+    background: #ab4;
+    border-radius: 3px;
+    border: 1px solid black;
+}
+#winnerPresentation
+{
+    background: #efe;
+    width: 200px;
+    padding: 10px;
+    border: 1px solid green;
+}
+#winnerPresentation h1
+{
+    font-size: 20px;
+    color: green;
+    margin-bottom: 10px;
+}
+#winnerPresentation button
+{
+    padding: 10px;
+    margin: 10px auto;
+    width: 150px;
+}
+.dontShow
+{
+    display: none;
+}
+#probababilitiesForCandidate
+{
+    position: relative;
+}
+#probababilitiesForCandidate .probEcho
+{
+    position: absolute;
+    right: 0px;
+}
+#infoBox
+{
+    position: absolute;
+    top: 70px;
+    right: 30px;
+    background: white;
+    width: 300px;
+    border: 1px solid black;
+    padding: 5px;
+    z-index: 10;
+}
+#CalcHeader
+{
+    color: black;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
