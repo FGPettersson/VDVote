@@ -26,30 +26,13 @@ if(isset($election))
 }
 
 echo "
-<header class='shaded'>
-    <ol>
-    <li><a href='./index.php' class='backLink firstLink'><img src='./img/users2.png'>Alla val</a></li>
-    <li><a href='./election.php?election=$election' class='backLink secondLink'><img src='./img/settings48.png'>Inställningar</a></li>
-    </ol>
-    <a href='#' class='delLink' id='removeBallotsLink'><img src='./img/delete96.png'>Ta bort samtliga röster</a>
-            <div id='delConfirm'>
-            <div id='delConfirmContent'>
-                Är du säker på att du vill ta bort alla röster?<br />
-                <a href='#' id='delConfirmYes'>Ja</a>
-                <a href='#' id='delConfirmNo'>Nej</a>
-            </div>
-        </div>
 
-    <h1>$title</h1>
-</header>
-
-<div id='main'>
     <div class='centerBox relative'>
         <div class='myList' >
             <h2>Kandidater</h2>
             <ol id='listOfRunners'>";
 $i = 0;
-$charList = "123456789QWERTYUIOPASDFGHJKLZXCVBNM";
+$charList = "123456789qwertyuiopasdfghjklzxcvbnm";
 while($cData = $candidatesData->fetch_object())
 {
     $lID = substr($charList, $i, 1);
@@ -145,6 +128,34 @@ $('#delConfirmYes').click(function(){
     $('#delConfirm').hide();
 });
 
+var keyMap = [];
+keyMap['key113'] = 10; // q
+keyMap['key119'] = 11; // w
+keyMap['key101'] = 12; // e
+keyMap['key114'] = 13; // r
+keyMap['key116'] = 14; // t
+keyMap['key121'] = 15; // y
+keyMap['key117'] = 16; // u
+keyMap['key105'] = 17; // i
+keyMap['key111'] = 18; // o
+keyMap['key112'] = 19; // p
+keyMap['key97'] = 20; // a
+keyMap['key115'] = 21; // s
+keyMap['key100'] = 22; // d
+keyMap['key102'] = 23; // f
+keyMap['key103'] = 24; // g
+keyMap['key104'] = 25; // h
+keyMap['key106'] = 26; // j
+keyMap['key107'] = 27; // k
+keyMap['key108'] = 28; // l
+keyMap['key122'] = 29; // z
+keyMap['key120'] = 30; // x
+keyMap['key99'] = 31; // c
+keyMap['key118'] = 32; // v
+keyMap['key98'] = 33; // b
+keyMap['key110'] = 34; // n
+keyMap['key109'] = 35; // m
+
 $(document).keyup(function (e) {
     if(confirmState == true)
     {
@@ -163,12 +174,22 @@ $(document).keyup(function (e) {
         if (e.which == 13) {
             castVote();
         }
-        if (e.which > 48 && e.which < 57) {
+        if (e.which > 48 && e.which < 58) {
             var acID = e.which-48;
             if($('#listOfRunners li[data-listID='+ acID +']').length) {
                 addCandidateToBallot($('#listOfRunners li[data-listID=' + acID + ']'));    
             }
         }
+        // if (e.which > 96 && e.which < 123)
+        // {
+
+        //     var keyString = "key"+e.which;
+        //     var acID = keyMap[keyString];
+        //     alert(keyString + " : " + acID);
+        //     if($('#listOfRunners li[data-listID='+ acID +']').length) {
+        //         addCandidateToBallot($('#listOfRunners li[data-listID=' + acID + ']'));    
+        //     }
+        // }
 
     }
 });
@@ -311,9 +332,9 @@ function resizeResultBoxes()
     var minHeight = 150;
     var rowHeight = 58 + 16 * ($('#resultContainer li.candidateListElement').length - 1);
     rowHeight = Math.max(rowHeight, minHeight)
-    var minLiWidth = 120;
+    var minLiWidth = 95;
     var maxLiWidth = 180;
-    var liWidth = 110; // initializing with value belove min value.
+    var liWidth = 90; // initializing with value belove min value.
     var rows = 0;
     var ulWidth = $('#resultContainer ul').width();
     var liCount = $('#resultContainer li.candidateListElement').length;

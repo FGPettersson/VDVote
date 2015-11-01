@@ -25,33 +25,19 @@ if(isset($election))
 
 
 echo "
-<header class='shaded'>
-    <a href='./index.php' class='backLink'><img src='./img/users2.png'>Alla val</a>
-    <a href='#' class='delLink'><img src='./img/delete96.png'>Ta bort valet</a>
-        <div id='delConfirm'>
-            <div id='delConfirmContent'>
-                Är du säker på att du vill ta bort valet av $title?<br />
-                <a href='#' id='delConfirmYes'>Ja</a>
-                <a href='#' id='delConfirmNo'>Nej</a>
-            </div>
-        </div>
-    <h1>$title</h1>
-</header>
 
-<div id='main'>
     <div class='centerBox'>
         <div class='myList'>
             <h2>Kandidater</h2>
             <input type='text' id='newCandidate' placeholder='Lägg till ny kandidat' />
             <ul id='runnerList' class='sortable'>
             </ul>
-            <a class='buttonStyle' id='voteLink' href='./vote.php?election=$election'>Rösta</a>
         </div>
         <div id='electionInfo'>
             <label><input type='text' id='ePosition' class='eForm' /><span>Position</span><img class='inputRightImage' src='./img/business133.png'></label>
             <label><textarea id='eDescription' class='eForm'></textarea><span id='eDescSpan'>Beskrivning</span><img class='textareaRightImage' src='./img/write12.png'></label>
             <div id='numberOfSeatsAndBackups'>
-                <label><input id='eNumberOfSeats' type='text' class='shortInput eForm' /><span>Antal platser</span><img src='./img/users32.png' /></label>
+                <label><input id='eNumberOfSeats' type='text' class='shortInput eForm' /><span>Antal platser</span><img src='./img/chair.png' /></label>
                 <label><input id='eNumberOfBackups' type='text' class='shortInput eForm' /><span>Antal suppleanter</span></label>
             </div>
             <div id='majorityInput'>

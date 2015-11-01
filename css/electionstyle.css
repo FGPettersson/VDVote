@@ -151,7 +151,7 @@ textarea
     border: 1px solid #ccc;
     padding-right: 40px;
 }
-li
+/*li
 {
     list-style: none;
     display: block;
@@ -164,8 +164,8 @@ li a
     margin: 0px;
     text-decoration: none;
     width: 240px;
-}
-li:hover
+}*/
+/*li:hover
 {
     background-color: #acf;
 }
@@ -177,7 +177,7 @@ li h3
 li p
 {
     color: #003c8d;
-}
+}*/
 #electionInfo
 {
     margin-top: 10px;

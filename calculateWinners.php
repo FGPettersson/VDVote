@@ -27,18 +27,11 @@ $numberOfBackups = $elDat->numberOfBackups;
 $MajorityNeeded = $elDat->MajorityNeeded*1.0000000001; // Quick and dirty trick to make sure we are ABOVE the majority limit.
 $VotesToWin = ceil($numberOfBallots*($MajorityNeeded/100));
 
+$display = true; // Vet inte om vi någonsin inte ska visa.
 
 if($display == "true")
 {
     print_html_header();
-    echo "<header class='shaded'>
-    <a href='./index.php' class='backLink'><img src='./img/users2.png'>Alla val</a>
-    <a href='./election.php?election=$election' class='backLink secondLink'><img src='./img/settings48.png'>Inställningar</a>
-    <a href='./vote.php?election=$election' class='backLink secondLink'><img src='./img/political5.png'>Röster</a>
-    <h1>".$elDat->Position."</h1>
-</header>";
-
-    print_html_footer();
     echo "<div id='infoBox'>";
     echo "Avlagda röster: ".$numberOfBallots."<br />";
     echo "För att vinna behövs $VotesToWin röster <br />";
@@ -50,7 +43,9 @@ if($display == "true")
 }
 
 removeAllCalculations();
-$firstNode = createFirstNode();
+
+if(!$firstNode = createFirstNode())
+    die('Det finns inga röster!');
 calculate($firstNode);
 $totaltMaxDepth = $sql_connection->query("SELECT Depth FROM calcNodes WHERE Election = $election ORDER BY Depth DESC LIMIT 1")->fetch_object()->Depth;
 calculateProbabilies(1);
@@ -85,10 +80,12 @@ function calculate($thisNode)
     {
         $position = 1;
         $bottom = array();
+        $someOneIsRunning = false; 
         while($rank1s = $rank1sQ->fetch_object())
         {
             if($rank1s->stillRunning == 1)
             {
+                $someOneIsRunning = true;
                 if($position == 1)
                 {
                     $topresult = $rank1s;
@@ -96,20 +93,22 @@ function calculate($thisNode)
                 }
                 else
                 {
-                    if($bottom[0]->sumVotes > $rank1s->sumVotes)
+                    if($rank1s->sumVotes < $bottom[0]->sumVotes)
                     {
                         unset($bottom);
                         $bottom[0] = $rank1s;
                     }
-                    else if($bottom[0]->sumVotes === $rank1s->sumVotes)
+                    else if($rank1s->sumVotes === $bottom[0]->sumVotes)
                     {
                         $bottom[] = $rank1s;
                     }
                 }
                 $position += 1;
-
             }
         }
+
+        if(!$someOneIsRunning)
+            return;
 
         global $VotesToWin;
         if($topresult->sumVotes >= $VotesToWin)
@@ -276,9 +275,8 @@ function displayAll()
     global $numberOfBackups;
     global $firstNode;
 
-    echo "<div id='nodeSpace'>";
     // display winner.
-    echo "<div id='winnerPresentation'>";
+    echo "\n<div id='winnerPresentation'>\n";
     if(singleWinner())
     {
         $winners = getPreviouslyElected($sql_connection->query("SELECT id FROM calcNodes WHERE Election=$election AND endNode=1")->fetch_object()->id);
@@ -299,7 +297,7 @@ function displayAll()
         echo "<button onclick='showWinners()'>Genomför lottning</button>";
 
     }
-    echo "<h1 class='$winDisplayClass'>Valda personer</h1>";
+    echo "<h1 class='$winDisplayClass'>Valda personer</h1>\n";
     $idStr = array();
     foreach ($winners as $winner) {
         $idStr[] = "id = $winner";
@@ -307,13 +305,15 @@ function displayAll()
     $totStr = implode(" OR ", $idStr);
 
     $winNames = $sql_connection->query("SELECT * FROM candidates WHERE $totStr");
-    echo "<ul class='$winDisplayClass'>";
+    echo "<ul class='$winDisplayClass'>\n";
     while($winName = $winNames->fetch_object())
     {
-        echo "<li>".$winName->Name."</li>";
+        echo "<li>".$winName->Name."</li>\n";
     }
     echo "</ul>";
     echo "</div>";
+
+    echo "<div id='nodeSpace'>";
     flush();
 
     $allNs = $sql_connection->query("SELECT * FROM calcNodes WHERE Election = $election");
@@ -473,7 +473,7 @@ function changeNodeVerticals(node, maxWidthDepth, maxDepth)
         divider++;
     });
 
-    var totalCenter = Math.max(400,cumulativPosition/divider-100);
+    var totalCenter = Math.max(230,cumulativPosition/divider-100);
 
     for(var i=0; i<=maxDepth; i++)
     {
@@ -621,17 +621,30 @@ function getPreviouslyElected($node){
         return $allElectedInBranch;
 
     $currentNode = $sql_connection->query("SELECT parentNode as pID FROM calcRelations WHERE childNode=$node")->fetch_object()->pID;
-        
-    while($currentNode != $firstNode)
+    $onANode = true;
+
+    while($onANode)
     {
         $eID = $sql_connection->query("SELECT * FROM calcElected WHERE Node=$currentNode");
+
         if($eID->num_rows == 1)
-        {
             $allElectedInBranch[] = (int)$eID->fetch_object()->Runner;
-        }
-        $currentNode = $sql_connection->query("SELECT parentNode as pID FROM calcRelations WHERE childNode=$currentNode")->fetch_object()->pID;
+
+        if($currentNode == $firstNode)
+            $onANode = FALSE;
+        else
+            $currentNode = $sql_connection->query("SELECT parentNode as pID FROM calcRelations WHERE childNode=$currentNode")->fetch_object()->pID;
     }
-    return array_reverse($allElectedInBranch);
+        return array_reverse($allElectedInBranch);
+}
+function getParentNode($node)
+{
+    global $sql_connection;
+    $sql_result = $sql_connection->query("SELECT parentNode as pID FROM calcRelations WHERE childNode=$currentNode");
+    if($sql_result->num_rows == 1)
+        return $sql_result->fetch_object()->pID;
+    else
+        return FALSE;
 }
 function getDepth($node)
 {
@@ -640,13 +653,6 @@ function getDepth($node)
 
     return $sql_connection->query("SELECT Depth FROM calcNodes WHERE id='$node'")->fetch_object()->Depth;
 
-    // if($node == $firstNode)
-    //     return 0;
-    // else
-    // {
-    //     $pID = $sql_connection->query("SELECT parentNode as pID FROM calcRelations WHERE childNode=$node")->fetch_object()->pID;
-    //     return 1 + getDepth($pID);
-    // }
 }
 function maxDepth()
 {

@@ -1,6 +1,6 @@
 #nodeSpace
 {
-    margin: 20px 10px;
+    margin: 0px 0px;
     position: relative;
 }
 .zfix
@@ -14,8 +14,15 @@
 .node
 {
     position: absolute;
-    width: 200px;
+    width: 190px;
     opacity: 1;
+    cursor: zoom-in;
+}
+.node:hover
+{
+    box-shadow: 0px 0px 4px #666;
+    -webkit-box-shadow: 0px 0px 4px #666;
+    -moz-box-shadow: 0px 0px 8px #666;
 }
 .node table
 {
@@ -43,6 +50,10 @@
     padding:5px 0px;
     list-style-type: decimal;
     margin-left: 25px;
+}
+.node .stillRunning .name
+{
+    margin-right: 18px;
 }
 .node .stillRunning .voteCount
 {
@@ -72,12 +83,19 @@
     width: 200px;
     padding: 10px;
     border: 1px solid green;
+    position: absolute;
+    top: 20px;
+    left: 0px;
 }
 #winnerPresentation h1
 {
-    font-size: 20px;
+    font-size: 14px;
     color: green;
-    margin-bottom: 10px;
+    white-space: normal;
+    padding: 5px;
+    margin: 5px;
+    float: none;
+    text-align: left;
 }
 #winnerPresentation button
 {
@@ -101,14 +119,15 @@
 #infoBox
 {
     position: absolute;
-    top: 70px;
-    right: 30px;
+    top: 20px;
+    right: 20px;
     background: white;
     width: 300px;
     border: 1px solid black;
     padding: 5px;
     z-index: 10;
 }
+
 #CalcHeader
 {
     color: black;

@@ -83,7 +83,7 @@
 {
     background: #aaa;
     position: absolute;
-    top: 92px;
+    top: 73px;
     left: 0px;
     height: 290px;
     width: 180px;
@@ -128,7 +128,7 @@
     position: absolute;
     display: inline-block;
     top: 10px;
-    left: 43px;
+    left: 40%;
 }
 #voteControl .icon:after
 {

@@ -7,11 +7,6 @@ $sql_connection = connectToDatabase();
 print_html_header("<link rel='stylesheet' href='css/indexstyle.css'>");  
 
 echo "
-<header class='shaded'>
-    <h1>V-Dala personval</h1>
-</header>
-
-<div id='main'>
 
     <div id='selectElections' class='centerBox'>
         <div id='onGoingElections' class='myList shaded lfloat'>
