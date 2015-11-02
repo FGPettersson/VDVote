@@ -322,10 +322,15 @@ function deleteBallot(ballotNr)
 }
 function deleteAllBallots()
 {
-    $("#previousBallots li").each(function(){
-        deleteBallot($(this).attr('data-ballotID'));
+    var delAllBal = $.post('./ajax/deleteAllBallots.php', {Election: <? echo $election ?>});
+    delAllBal.done(function(xml){
+        if($(xml).find("status").text() == "OK")
+        {
+            $("#previousBallots li").animate({top: 0, width: 0, height: 0, left: 80}, 'fast', function(){
+                location.reload();
+            });
+        }
     });
-    location.reload();
 }
 $("#previousBallots .deleteBallotLink").on("click", function(){
     console.log("Jag är här!");
@@ -467,7 +472,7 @@ function displayBallots()
                         if(currentPosition.top != newTopPos)
                         {
                             if(firstLoad)
-                                $(this).hide(0).delay(350).show(0).animate({'top':newTopPos, 'left':newLeftPos},'fast');
+                                $(this).hide(0).delay(150).show(0).animate({'top':newTopPos, 'left':newLeftPos},'fast');
                             else
                                 $(this).animate({'top':newTopPos, 'left':newLeftPos},'fast');
                         }
@@ -477,7 +482,7 @@ function displayBallots()
 
         });
         if(firstLoad)
-        var lastDelay = (addCount+1)*delayTime;
+        var lastDelay = 0;
         $("#previousBallots>ul>li[data-ballotID='"+lastAdded+"']").hide(0).delay(lastDelay).show(0);
     });
 }

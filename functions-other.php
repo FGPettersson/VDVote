@@ -74,8 +74,6 @@ function removeElection(){
     remC.done(function(xml){
         if($(xml).find('status').text() == 'OK')
             location.href = './index.php';
-        else
-            alert('Kunde inte ta bort valet' + $(xml).find('status').text());
     });
 }
 
