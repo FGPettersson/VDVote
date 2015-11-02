@@ -79,10 +79,73 @@
     font-family: century gothic;
     font-size: 14px;
 }
+.ballotNr a.delvote, .ballotNr a.castvote
+{
+    height: 35px;
+    width: 35px;
+    padding: 0px;
+    bottom: 0px;
+    position: absolute;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.ballotNr a.delvote{
+    left: 0px;
+    background-image: url("../img/deleteBrown.png");
+}
+.ballotNr a.castvote{
+    right: 0px;
+    background-image: url("../img/castGreen.png");
+}
+.ballotNr a.delvote:hover
+{
+    background-image: url("../img/deleteWhite.png");
+    background-color: #b44;
+}
+.ballotNr a.castvote:hover
+{
+    background-image: url("../img/castWhite.png");
+    background-color: #00954D ;
+
+}
+#previousBallots
+{
+    position: relative;
+}
+#previousBallots .delAllLink
+{
+    background: #bbb;
+    text-decoration: none;
+    padding: 5px 5px 5px 40px;
+    font-family: century Gothic;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #eee;    
+    line-height: 30px;
+    height: 30px;
+    font-size: 14px;
+    width: 190px;
+    bottom: 0px;
+    display: block;
+    position: fixed;
+    bottom: 0px;
+}
+#previousBallots .delAllLink:hover
+{
+    background: #b44;
+    color: #eee;
+
+}
+#previousBallots .delAllLink img
+{
+    position: absolute;
+    left: 10px;
+    top: 8px;
+}
 #voteControl
 {
     background: #aaa;
-    position: absolute;
+    position: fixed;
     top: 73px;
     left: 0px;
     height: 290px;
@@ -170,6 +233,49 @@
     background: #ffd700;
     color: #666;
 }
+
+#previousBallots
+{
+    display: block;
+    position: fixed;
+    width: 220px;
+    height: 100%;
+    right: 0px;
+    top: 73px;
+    background: #ccc;
+    border-left: 2px solid #aaa;
+}
+#previousBallots h2
+{
+    font-size: 18px;
+}
+#previousBallots>ul
+{
+    width: 160px;
+    margin: 0px auto;
+    position: fixed;
+    bottom: 70px;
+    top: 120px;
+    right: 35px;
+}
+
+#previousBallots>ul>li
+{
+    position: absolute;
+    display: block;
+    background: white;
+    width: 100%;
+    border: 1px solid black;
+    box-sizing: border-box;
+    padding-top: 20px;
+    top: 0px;
+    transform: rotateX(0deg);
+}
+.singleDisplayedBallot
+{
+
+}
+
 #shadow
 {
     display: block;
@@ -227,8 +333,9 @@
 {
     position: fixed;
     bottom: 0px;
-    left: 4%;
-    width: 92%;
+    left: 20px;
+    right: 220px;
+    /*width: 92%;*/
     height: 200px;
     display: block;
 }

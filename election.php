@@ -38,7 +38,7 @@ echo "
             <label><textarea id='eDescription' class='eForm'></textarea><span id='eDescSpan'>Beskrivning</span><img class='textareaRightImage' src='./img/write12.png'></label>
             <div id='numberOfSeatsAndBackups'>
                 <label><input id='eNumberOfSeats' type='text' class='shortInput eForm' /><span>Antal platser</span><img src='./img/chair.png' /></label>
-                <label><input id='eNumberOfBackups' type='text' class='shortInput eForm' /><span>Antal suppleanter</span></label>
+                <label><input id='eNumberOfBackups' type='text' class='shortInput eForm' disabled /><span>Antal suppleanter</span></label>
             </div>
             <div id='majorityInput'>
                 <label>
@@ -166,7 +166,6 @@ $('#updateLink').click(function(){
 
 function removeElection(){
     var electionID = <? echo $election ?>;
-    console.log("Ska ta bort val med id: " + electionID);
     remC = $.post('./ajax/removeElection.php', { election: electionID });
     remC.done(function(xml){
         if($(xml).find("status").text() == "OK")

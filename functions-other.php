@@ -48,7 +48,15 @@ $current[$filename] = " class='current'";
 echo "</head><body><div id='container'>
 
 <header class='shaded'>
-    <h1>$title<a href='#'><img src='./img/menu48.png' /></a></h1>
+    <h1>$title<a href='#'><a href='#' class='delLink' id='removeElection'><img src='./img/deleteWhite.png'></a>
+        <div id='delConfirm'>
+            <div id='delConfirmContent'>
+                Är du säker på att du vill radera valet?<br />
+                <a href='#' id='delConfirmYes'>Ja</a>
+                <a href='#' id='delConfirmNo'>Nej</a>
+            </div>
+        </div>
+</h1>
     <nav>
         <ol>
             <li><a href='./index.php$getStr'".$current['index.php']."><img src='./img/users2.png'>Val</a></li>
@@ -57,18 +65,31 @@ echo "</head><body><div id='container'>
             <li><a href='./calculateWinners.php$getStr'".$current['calculateWinners.php']."><img src='./img/position5.png'>Resultat</a></li>
         </ol>
     </nav>
-
-    <a href='#' class='delLink' id='removeBallotsLink'><img src='./img/delete96.png'>Ta bort samtliga röster</a>
-            <div id='delConfirm'>
-            <div id='delConfirmContent'>
-                Är du säker på att du vill ta bort alla röster?<br />
-                <a href='#' id='delConfirmYes'>Ja</a>
-                <a href='#' id='delConfirmNo'>Nej</a>
-            </div>
-        </div>
-
     
 </header>
+<script type='text/javascript' language='javascript'>
+function removeElection(){
+    var electionID = $election;
+    remC = $.post('./ajax/removeElection.php', { election: electionID });
+    remC.done(function(xml){
+        if($(xml).find('status').text() == 'OK')
+            location.href = './index.php';
+        else
+            alert('Kunde inte ta bort valet' + $(xml).find('status').text());
+    });
+}
+
+$('.delLink').click(function(){
+    $('#delConfirm').show();
+});
+$('#delConfirmNo').click(function(){
+    $('#delConfirm').hide();
+});
+$('#delConfirmYes').click(function(){
+    $('#delConfirm').hide();
+    removeElection();
+});
+</script>
 
 <div id='main'>
 ";

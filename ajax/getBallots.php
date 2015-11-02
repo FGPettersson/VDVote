@@ -27,55 +27,45 @@ if(isset($_POST['Election']) && $_POST['Election']!="")
             {
                 $allRunners[$thisRunner->id] = $thisRunner->Name;
             }
-            $aV = $sql_connection->query("SELECT 
-                    ballots.Election as electionID, 
-                    ballots.id as ballotID, 
-                    votes.Rank as voteRank, 
-                    candidates.id AS candidateID, 
-                    candidates.Name as candidateName 
-                FROM 
-                    ballots, votes, candidates 
-                WHERE 
-                    ballots.Election = $Election AND 
-                    ballots.id = votes.Ballot AND 
-                    votes.Candidate = candidates.id 
-                ORDER BY 
-                    ballotNrPerElection ASC, Rank ASC");
-            $currentBallotID = NULL;
-            if($aV->num_rows > 0)
+            $gB = $sql_connection->query("SELECT * FROM ballots WHERE ballots.Election = $Election");
+            if($gB->num_rows>0)
             {
-                while($thisVote = $aV->fetch_object())
+                echo "<status>OK</status>";
+                while($thisBallot = $gB->fetch_object())
                 {
-                    if($thisVote->ballotID != $currentBallotID)
+                    echo "<ballot id='".$thisBallot->ballotNrPerElection."'>";
+                    $runnersLeft = $allRunners;
+                    $gV = $sql_connection->query("SELECT 
+                        votes.Rank, 
+                        votes.Candidate as candidateID, 
+                        candidates.Name as candidateName 
+                    FROM 
+                        votes, candidates 
+                    WHERE 
+                        Ballot=".$thisBallot->id." AND 
+                        votes.Candidate = candidates.id
+                    ORDER BY Rank ASC");
+
+                    if($gV->num_rows>0)
                     {
-                        // Hanterar första ballot. Behöver inte avsluta någon tidigare.
-                        if(!is_null($currentBallotID))
+                        echo "<voted>";
+                        while($thisVote = $gV->fetch_object())
                         {
-                            foreach ($runnersLeft as $key => $value) {
-                                echo "<vote rank=0>
-                                <candidate id=".$key.">".$value."</candidate>
-                                </vote>";
-                            }
-                            echo "</ballot>";
+                            echo "<vote rank='".$thisVote->Rank."'><candidate id='".$thisVote->candidateID."'>".$thisVote->candidateName."</candidate></vote>";
+                            unset($runnersLeft[$thisVote->candidateID]);
                         }
-                            
-                        echo "<ballot id=".$thisVote->ballotID.">";
-                        $currentBallotID = $thisVote->ballotID;
-                        $runnersLeft = $allRunners;
+                        echo "</voted>";
                     }
-                    echo "<vote rank=".$thisVote->voteRank.">
-                    <candidate id=".$thisVote->candidateID.">
-                    ".$thisVote->candidateName."
-                    </candidate>
-                    </vote>";
-                    unset($runnersLeft[$thisVote->candidateID]);
+                    if(count($runnersLeft)>0)
+                    {
+                        echo "<unvoted>";
+                        foreach ($runnersLeft as $key => $value) {
+                            echo "<vote><candidate id='".$key."'>".$value."</candidate></vote>";
+                        }
+                        echo "</unvoted>";
+                    }
+                    echo "</ballot>";
                 }
-                foreach ($runnersLeft as $key => $value) {
-                    echo "<vote rank=0>
-                    <candidate id=".$key.">".$value."</candidate>
-                    </vote>";
-                }
-                echo "</ballot>";
             }
             else
                 echo "<status>NO_BALLOTS</status>";

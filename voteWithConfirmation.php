@@ -29,7 +29,6 @@ echo "
 <div id='previousBallots'>
 <h2>Avlagda röster</h2>
 <ul id='listOfBallots'></ul>
-<a href='#' class='delAllLink' onclick='deleteAllBallots()'><img src='./img/delete96.png'>Radera alla röster</a>
 </div>
 
     <div class='centerBox relative'>
@@ -56,12 +55,11 @@ echo "
             </ol>
             <ul class='ballotUnvoted'>
             </ul>
-            <div class='ballotNr'><a class='delvote' href='#' onclick='resetVote()'></a>RÖST #<span></span><a class='castvote' href='#' onclick='castVote()'></a></div>
+            <div class='ballotNr'>RÖST #<span></span></div>
         </div>
         <div class='clear'> </div>
     </div>
     <div class='clear'> </div>
-<!--
     <div id='voteControl'>
         <ul>
             <li><a id='voteButton' href='#' onClick='castVote()'><img class='key' src='./img/enter-key50.png' /><img class='icon' src='./img/political5.png' />Lägg röst</a></li>
@@ -69,7 +67,7 @@ echo "
             <li><a id='resultLink' href='./calculateWinners.php?election=$election&display=true'><img class='icon' src='./img/position5.png' />Se resultat</a></li>
         </ul>
     </div>
---!>
+
 </div>
 ";
 
@@ -134,46 +132,69 @@ $('#delConfirmYes').click(function(){
     $('#delConfirm').hide();
 });
 
-// var keyMap = [];
-// keyMap['key113'] = 10; // q
-// keyMap['key119'] = 11; // w
-// keyMap['key101'] = 12; // e
-// keyMap['key114'] = 13; // r
-// keyMap['key116'] = 14; // t
-// keyMap['key121'] = 15; // y
-// keyMap['key117'] = 16; // u
-// keyMap['key105'] = 17; // i
-// keyMap['key111'] = 18; // o
-// keyMap['key112'] = 19; // p
-// keyMap['key97'] = 20; // a
-// keyMap['key115'] = 21; // s
-// keyMap['key100'] = 22; // d
-// keyMap['key102'] = 23; // f
-// keyMap['key103'] = 24; // g
-// keyMap['key104'] = 25; // h
-// keyMap['key106'] = 26; // j
-// keyMap['key107'] = 27; // k
-// keyMap['key108'] = 28; // l
-// keyMap['key122'] = 29; // z
-// keyMap['key120'] = 30; // x
-// keyMap['key99'] = 31; // c
-// keyMap['key118'] = 32; // v
-// keyMap['key98'] = 33; // b
-// keyMap['key110'] = 34; // n
-// keyMap['key109'] = 35; // m
+var keyMap = [];
+keyMap['key113'] = 10; // q
+keyMap['key119'] = 11; // w
+keyMap['key101'] = 12; // e
+keyMap['key114'] = 13; // r
+keyMap['key116'] = 14; // t
+keyMap['key121'] = 15; // y
+keyMap['key117'] = 16; // u
+keyMap['key105'] = 17; // i
+keyMap['key111'] = 18; // o
+keyMap['key112'] = 19; // p
+keyMap['key97'] = 20; // a
+keyMap['key115'] = 21; // s
+keyMap['key100'] = 22; // d
+keyMap['key102'] = 23; // f
+keyMap['key103'] = 24; // g
+keyMap['key104'] = 25; // h
+keyMap['key106'] = 26; // j
+keyMap['key107'] = 27; // k
+keyMap['key108'] = 28; // l
+keyMap['key122'] = 29; // z
+keyMap['key120'] = 30; // x
+keyMap['key99'] = 31; // c
+keyMap['key118'] = 32; // v
+keyMap['key98'] = 33; // b
+keyMap['key110'] = 34; // n
+keyMap['key109'] = 35; // m
 
 $(document).keyup(function (e) {
-    if (e.which == 27) {
-        resetVote();
-    }
-    if (e.which == 13) {
-        castVote();
-    }
-    if (e.which > 48 && e.which < 58) {
-        var acID = e.which-48;
-        if($('#listOfRunners li[data-listID='+ acID +']').length) {
-            addCandidateToBallot($('#listOfRunners li[data-listID=' + acID + ']'));    
+    if(confirmState == true)
+    {
+        if (e.which == 13) {
+            confirmVote();
         }
+        if (e.which == 27) {
+            cancelCastingVote();
+        }
+    }
+    else
+    {
+        if (e.which == 27) {
+            resetVote();
+        }
+        if (e.which == 13) {
+            castVote();
+        }
+        if (e.which > 48 && e.which < 58) {
+            var acID = e.which-48;
+            if($('#listOfRunners li[data-listID='+ acID +']').length) {
+                addCandidateToBallot($('#listOfRunners li[data-listID=' + acID + ']'));    
+            }
+        }
+        // if (e.which > 96 && e.which < 123)
+        // {
+
+        //     var keyString = "key"+e.which;
+        //     var acID = keyMap[keyString];
+        //     alert(keyString + " : " + acID);
+        //     if($('#listOfRunners li[data-listID='+ acID +']').length) {
+        //         addCandidateToBallot($('#listOfRunners li[data-listID=' + acID + ']'));    
+        //     }
+        // }
+
     }
 });
 
@@ -184,7 +205,26 @@ function resetVote()
 }
 function confirmVote()
 {
-
+    var cIDs = new Array();
+    var ballotNr = $('#confirmBallot .ballotNr span').text()
+    var i = 1;
+    $('#confirmBallot .ballotVoted li').each(function(){
+        var cID = $(this).attr("data-cID");
+        cIDs[i] = cID;
+        i++;
+    });
+    if(voteToDB(cIDs))
+    {
+        $('#confirmWrap').remove();
+        $('#shadow').remove();
+        confirmState = false;
+        resetVote();
+        getBallotNr();
+        getVotes();
+        displayBallots();
+    }
+    else
+        alert("Misslyckades med att lägga till rösten!");
 }
 
 function voteToDB(cIDs, ballotNr)
@@ -244,7 +284,7 @@ function getBallotNr()
         if(status == "OK")
         {
             var ballotNr = $(xml).find("ballotNr").text();
-            $('#ballotBox .ballotNr span').text(ballotNr);
+            $('.ballotNr span').text(ballotNr);
         }
         else
             alert("Kunde inte hämta röstens nummer");
@@ -253,37 +293,15 @@ function getBallotNr()
 
 function castVote()
 {
-    // $('body').append("<div id='shadow'></div>" +
-    //     "<div id='confirmWrap'>" +
-    //     "<div id='confirmBallot'><a id='closeDiv' onClick='cancelCastingVote()'>x</a></div></div>");
-    // $('#confirmBallot').append($('#ballotBox').html());
-    // $('#confirmBallot .ballotUnvoted').append(.html());
-    // $('#confirmBallot div.voteNR').each(function(){
-    //     $(this).remove();
-    // });
-    // confirmState = true;
-
-    var cIDs = new Array();
-    var ballotNr = $('#ballotBox .ballotNr span').text()
-    console.log("ballotNr är " + ballotNr);
-    var i = 1;
-    $('#ballotBox li').each(function(){
-        var cID = $(this).attr("data-cID");
-        cIDs[i] = cID;
-        i++;
+    $('body').append("<div id='shadow'></div>" +
+        "<div id='confirmWrap'>" +
+        "<div id='confirmBallot'><a id='closeDiv' onClick='cancelCastingVote()'>x</a></div></div>");
+    $('#confirmBallot').append($('#ballotBox').html());
+    $('#confirmBallot .ballotUnvoted').append($('#listOfRunners').html());
+    $('#confirmBallot div.voteNR').each(function(){
+        $(this).remove();
     });
-    if(voteToDB(cIDs))
-    {
-        // $('#confirmWrap').remove();
-        // $('#shadow').remove();
-        // confirmState = false;
-        resetVote();
-        getBallotNr();
-        getVotes();
-        displayBallots();
-    }
-    else
-        alert("Misslyckades med att lägga till rösten!");
+    confirmState = true;
 }
 function cancelCastingVote()
 {
@@ -306,32 +324,6 @@ function resetBallot()
 {
     replaceList(originalList);
 }
-function deleteBallot(ballotNr)
-{
-    var delBal = $.post('./ajax/deleteBallot.php', { Election: <? echo $election ?>, BallotNr: ballotNr});
-    delBal.done(function(xml){
-        if($(xml).find("status").text() == "OK")
-        {
-            getVotes();
-            $("#previousBallots>ul>li[data-ballotID='"+ ballotNr +"']").animate({top: 0, width: 0, height: 0, left: 80}, 'fast', function(){
-                $(this).remove();
-
-            });
-        }
-    })
-}
-function deleteAllBallots()
-{
-    $("#previousBallots li").each(function(){
-        deleteBallot($(this).attr('data-ballotID'));
-    });
-    location.reload();
-}
-$("#previousBallots .deleteBallotLink").on("click", function(){
-    console.log("Jag är här!");
-    var ballotNr = parseInt($(this).parent().children("span").text());
-    console.log(ballotNr);
-});
 
 function addResultBoxes()
 {
@@ -460,10 +452,10 @@ function displayBallots()
 
                 $(newLi).appendTo("#previousBallots>ul");
                     $("#previousBallots>ul>li[data-ballotID='" + $(newLi).attr('data-ballotID') + "']").each(function(){
-                        var newTopPos = areaHeight - $(this).height() - $(this).attr('data-ballotID') * 2 - 20;
+                        var newTopPos = areaHeight - $(this).height() - $(this).attr('data-ballotID') * 2;
                         var newLeftPos = randomIntFromInterval(0,5);
-                        var newRotate = randomIntFromInterval(-5,5);
                         var currentPosition = $(this).position();
+                        console.log(newTopPos);
                         if(currentPosition.top != newTopPos)
                         {
                             if(firstLoad)
@@ -478,6 +470,7 @@ function displayBallots()
         });
         if(firstLoad)
         var lastDelay = (addCount+1)*delayTime;
+    console.log("lastDelay: " + lastDelay);
         $("#previousBallots>ul>li[data-ballotID='"+lastAdded+"']").hide(0).delay(lastDelay).show(0);
     });
 }
@@ -518,7 +511,7 @@ function createNewBallotElement(ballotXML)
         addStr += "</ul>\n";
     }
 
-    addStr += "<div class='ballotNr'><a href='#' class='delvote' onclick='deleteBallot("+ $(thisBallot).attr('id') +")'></a>RÖST #<span>" + $(thisBallot).attr('id') + "</span>\n</div>\n</li>\n";
+    addStr += "<div class='ballotNr'>RÖST #" + $(thisBallot).attr('id') + "</span>\n</div>\n</li>\n";
     $(newLi).append(addStr);
     return newLi;
 }
