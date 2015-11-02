@@ -254,8 +254,8 @@
     width: 160px;
     margin: 0px auto;
     position: fixed;
+    top: 100px;
     bottom: 70px;
-    top: 120px;
     right: 35px;
 }
 

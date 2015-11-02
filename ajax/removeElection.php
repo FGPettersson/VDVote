@@ -18,7 +18,6 @@ if(isset($_POST['election']) && $_POST['election']!=""){
         echo "<status>OK</status>";
     else
         echo "<status>ELECTION_NOT_DELETED:DB_ERROR</status>";
-
 }
 else
     echo "<status>FAILED_MISSING_ELECTION_ID</status>";

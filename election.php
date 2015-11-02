@@ -164,17 +164,6 @@ $('#updateLink').click(function(){
     updateElection();
 });
 
-function removeElection(){
-    var electionID = <? echo $election ?>;
-    remC = $.post('./ajax/removeElection.php', { election: electionID });
-    remC.done(function(xml){
-        if($(xml).find("status").text() == "OK")
-            location.href = './index.php';
-        else
-            alert("Kunde inte ta bort valet\n" + $(xml).find("status").text());
-    });
-}
-
 function removeRunner(cID)
 {
     remC = $.post('./ajax/removeRunner.php', { Candidate: cID, Election: <? echo $election; ?> });
@@ -206,16 +195,6 @@ $('#newCandidate').keypress(function (e) {
         $('#newCandidate').val("");
         getRunners();
     }
-});
-$('.delLink').click(function(){
-    $('#delConfirm').show();
-});
-$('#delConfirmNo').click(function(){
-    $('#delConfirm').hide();
-});
-$('#delConfirmYes').click(function(){
-    $('#delConfirm').hide();
-    removeElection();
 });
 
 

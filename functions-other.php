@@ -66,29 +66,35 @@ echo "</head><body><div id='container'>
         </ol>
     </nav>
     
-</header>
-<script type='text/javascript' language='javascript'>
-function removeElection(){
-    var electionID = $election;
-    remC = $.post('./ajax/removeElection.php', { election: electionID });
-    remC.done(function(xml){
-        if($(xml).find('status').text() == 'OK')
-            location.href = './index.php';
+</header>";
+if(!is_null($election))
+{
+echo "
+    <script type='text/javascript' language='javascript'>
+    function removeElection(){
+        var electionID = $election;
+        remC = $.post('./ajax/removeElection.php', { election: electionID });
+        remC.done(function(xml){
+            if($(xml).find('status').text() == 'OK')
+                location.href = './index.php';
+        });
+    }
+
+    $('.delLink').click(function(){
+        $('#delConfirm').show();
     });
+    $('#delConfirmNo').click(function(){
+        $('#delConfirm').hide();
+    });
+    $('#delConfirmYes').click(function(){
+        $('#delConfirm').hide();
+        removeElection();
+    });
+    </script>
+";
 }
 
-$('.delLink').click(function(){
-    $('#delConfirm').show();
-});
-$('#delConfirmNo').click(function(){
-    $('#delConfirm').hide();
-});
-$('#delConfirmYes').click(function(){
-    $('#delConfirm').hide();
-    removeElection();
-});
-</script>
-
+echo "
 <div id='main'>
 ";
 
