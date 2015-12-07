@@ -1,0 +1,3 @@
+AuthUserFile /customers/1/9/e/twitterrapport.se/httpd.www/VDVote/.htpasswd
+AuthType Basic
+AuthName "VDVote - Vote counting for V-Dala nation"

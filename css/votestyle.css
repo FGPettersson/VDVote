@@ -263,7 +263,12 @@
 {
     position: absolute;
     display: block;
-    background: white;
+    background-color: white;
+    -webkit-transition: background-color 2000ms ease-out;
+    -moz-transition: background-color 2000ms ease-out;
+    -o-transition: background-color 2000ms ease-out;
+    -ms-transition: background-color 2000ms ease-out;
+    transition: background-color 2000ms ease-out;
     width: 100%;
     border: 1px solid black;
     box-sizing: border-box;
@@ -271,6 +276,15 @@
     top: 0px;
     transform: rotateX(0deg);
 }
+#previousBallots>ul>li.newColor:not(.delColor)
+{
+    background-color: #00954D;
+}
+#previousBallots>ul>li.newColor.delColor
+{
+    background-color: #b44;
+}
+
 .singleDisplayedBallot
 {
 

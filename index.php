@@ -12,6 +12,7 @@ echo "
         <div id='onGoingElections' class='myList shaded lfloat'>
         <h2>Aktuella val</h2>
         <input type='text' id='newElection' placeholder='Lägg till nytt val' />
+        <a href='#' class='addLink' onclick='addElection()'></a>
         <ul id='electionList'>";
 
 
@@ -78,15 +79,18 @@ function getElections()
 $('#newElection').keypress(function (e) {
     if (e.which == 13) {
         e.preventDefault();
-        var Title = $('#newElection').val();
-        var addE = $.post('./ajax/addElection.php', { Position: Title });
-        addE.done(function(xml){
-            getElections();
-        });
-        $('#newElection').val("");
-        // getRunners();
+        addElection();
     }
 });
+function addElection()
+{
+    var Title = $('#newElection').val();
+    var addE = $.post('./ajax/addElection.php', { Position: Title });
+    addE.done(function(xml){
+        getElections();
+    });
+    $('#newElection').val("");
+}
 
 $(document).ready(function(){
     getElections();

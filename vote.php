@@ -56,7 +56,7 @@ echo "
             </ol>
             <ul class='ballotUnvoted'>
             </ul>
-            <div class='ballotNr'><a class='delvote' href='#' onclick='resetVote()'></a>RÖST #<span></span><a class='castvote' href='#' onclick='castVote()'></a></div>
+            <div class='ballotNr'><a class='delvote' href='#' onclick='resetVote()'></a>RÖST #<span></span><a id='voteSubmit' class='castvote' href='#' onclick='castVote()'></a></div>
         </div>
         <div class='clear'> </div>
     </div>
@@ -163,6 +163,7 @@ $('#delConfirmYes').click(function(){
 // keyMap['key109'] = 35; // m
 
 $(document).keyup(function (e) {
+    e.preventDefault();
     if (e.which == 27) {
         resetVote();
     }
@@ -281,6 +282,7 @@ function castVote()
         getBallotNr();
         getVotes();
         displayBallots();
+        $("#voteSubmit").blur();
     }
     else
         alert("Misslyckades med att lägga till rösten!");
@@ -315,6 +317,7 @@ function deleteBallot(ballotNr)
             getVotes();
             $("#previousBallots>ul>li[data-ballotID='"+ ballotNr +"']").animate({top: 0, width: 0, height: 0, left: 80}, 'fast', function(){
                 $(this).remove();
+                addRemoveLinkToLastPreviousBallot();
 
             });
         }
@@ -333,7 +336,6 @@ function deleteAllBallots()
     });
 }
 $("#previousBallots .deleteBallotLink").on("click", function(){
-    console.log("Jag är här!");
     var ballotNr = parseInt($(this).parent().children("span").text());
     console.log(ballotNr);
 });
@@ -466,15 +468,20 @@ function displayBallots()
                 $(newLi).appendTo("#previousBallots>ul");
                     $("#previousBallots>ul>li[data-ballotID='" + $(newLi).attr('data-ballotID') + "']").each(function(){
                         var newTopPos = areaHeight - $(this).height() - $(this).attr('data-ballotID') * 2 - 20;
-                        var newLeftPos = randomIntFromInterval(0,5);
-                        var newRotate = randomIntFromInterval(-5,5);
+                        var newLeftPos = randomIntFromInterval(0,10);
+                        var newRotate = "rotate(" + randomIntFromInterval(-2,2) + "deg)";
                         var currentPosition = $(this).position();
+
+                        var newCss = {'top':newTopPos, 'left':newLeftPos, '-webkit-transform':newRotate, '-moz-transform':newRotate, '-ms-transform':newRotate};
                         if(currentPosition.top != newTopPos)
                         {
                             if(firstLoad)
-                                $(this).hide(0).delay(150).show(0).animate({'top':newTopPos, 'left':newLeftPos},'fast');
+                                $(this).hide(0).delay(150).show(0).css(newCss);
                             else
-                                $(this).animate({'top':newTopPos, 'left':newLeftPos},'fast');
+                                $(this).hide(0).addClass('newColor').css(newCss).show();
+                                setTimeout(function(){ 
+                                    $(newLi).removeClass('newColor');
+                                }, 00);
                         }
 
                     });
@@ -484,7 +491,16 @@ function displayBallots()
         if(firstLoad)
         var lastDelay = 0;
         $("#previousBallots>ul>li[data-ballotID='"+lastAdded+"']").hide(0).delay(lastDelay).show(0);
+        addRemoveLinkToLastPreviousBallot();
     });
+}
+function addRemoveLinkToLastPreviousBallot()
+{
+    $("#previousBallots>ul .ballotNr a").remove();
+    $("#previousBallots>ul>li:last-of-type").each(function(){
+        var ballotNR = $(this).attr('data-ballotID');
+        $(this).find(".ballotNr").append("<a href='#' class='delvote' onclick='deleteBallot("+ ballotNR +")'></a>");
+    })
 }
 function createNewBallotElement(ballotXML)
 {
@@ -492,6 +508,7 @@ function createNewBallotElement(ballotXML)
     // var addStr = "<li data-ballotID='" + $(thisBallot).attr('id') + "'>";
     var newLi = document.createElement("li");
     $(newLi).attr('data-ballotID', $(thisBallot).attr('id'));
+    $(newLi).addClass('newColor');
 
     var addStr = "<div class='singleDisplayedBallot'>\n";
     if($(thisBallot).find("voted").length>0)
@@ -508,6 +525,8 @@ function createNewBallotElement(ballotXML)
         });
         addStr += "</ol>\n";
     }
+    else
+        $(newLi).addClass('delColor');
     if($(thisBallot).find("unvoted").length>0)
     {
         addStr += "<ul class='ballotUnvoted'>\n";
@@ -523,7 +542,7 @@ function createNewBallotElement(ballotXML)
         addStr += "</ul>\n";
     }
 
-    addStr += "<div class='ballotNr'><a href='#' class='delvote' onclick='deleteBallot("+ $(thisBallot).attr('id') +")'></a>RÖST #<span>" + $(thisBallot).attr('id') + "</span>\n</div>\n</li>\n";
+    addStr += "<div class='ballotNr'>RÖST #<span>" + $(thisBallot).attr('id') + "</span>\n</div>\n</li>\n";
     $(newLi).append(addStr);
     return newLi;
 }

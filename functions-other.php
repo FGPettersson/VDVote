@@ -13,6 +13,7 @@ echo "
         <meta name='viewport' content='width=device-width, initial-scale=1'>
         <title>V-Dala personval</title>
         <link rel='stylesheet' href='css/reset.css'>
+        <link rel='shortcut icon' href='./img/favicon.ico' type='image/x-icon' />
         <link rel='stylesheet' href='css/main.css'>
         <script src='./js/jquery-1.10.2.js' type='text/javascript'></script>
         <script src='./js/someJS.js' type='text/javascript'></script>

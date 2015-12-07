@@ -277,41 +277,50 @@ function displayAll()
 
     // display winner.
     echo "\n<div id='winnerPresentation'>\n";
-    if(singleWinner())
+    if(noWinner())
     {
-        $winners = getPreviouslyElected($sql_connection->query("SELECT id FROM calcNodes WHERE Election=$election AND endNode=1")->fetch_object()->id);
-        $winDisplayClass='show';
+        echo "<h1>Ingen vinnare</h1>";
+        echo "Ingen av kandidaterna har fått tillräckligt många röster för att bli vald.";
     }
     else
     {
-        $winners = getPreviouslyElected($sql_connection->query("SELECT id FROM calcNodes WHERE Election=$election AND endNode=1 AND ResolvedWinner=1")->fetch_object()->id);
-        $winDisplayClass='dontShow';
-        echo "<h1>Sannolikhet för kandidaterna</h1>";
-        echo "<ul id='probababilitiesForCandidate'>";
-        $runners = $sql_connection->query("SELECT Candidate, Name FROM running, candidates WHERE Election = $election AND running.Candidate = candidates.id");
-        while($runner = $runners->fetch_object())
+        if(singleWinner())
         {
-            echo "<li>".$runner->Name."<span class='probEcho'>".round(100*getProbabilityForCandidateAsWinner($runner->Candidate),1)."%</span></li>";
+            $winners = getPreviouslyElected($sql_connection->query("SELECT id FROM calcNodes WHERE Election=$election AND endNode=1")->fetch_object()->id);
+            $winDisplayClass='show';
+        }
+        else
+        {
+            $winners = getPreviouslyElected($sql_connection->query("SELECT id FROM calcNodes WHERE Election=$election AND endNode=1 AND ResolvedWinner=1")->fetch_object()->id);
+            $winDisplayClass='dontShow';
+            echo "<h1>Sannolikhet för kandidaterna</h1>";
+            echo "<ul id='probababilitiesForCandidate'>";
+            $runners = $sql_connection->query("SELECT Candidate, Name FROM running, candidates WHERE Election = $election AND running.Candidate = candidates.id");
+            while($runner = $runners->fetch_object())
+            {
+                echo "<li>".$runner->Name."<span class='probEcho'>".round(100*getProbabilityForCandidateAsWinner($runner->Candidate),1)."%</span></li>";
+            }
+            echo "</ul>";
+            echo "<button onclick='showWinners()'>Genomför lottning</button>";
+
+        }
+        echo "<h1 class='$winDisplayClass'>Valda personer</h1>\n";
+        $idStr = array();
+        foreach ($winners as $winner) {
+            $idStr[] = "id = $winner";
+        }
+        $totStr = implode(" OR ", $idStr);
+
+        $winNames = $sql_connection->query("SELECT * FROM candidates WHERE $totStr");
+        echo "<ul class='$winDisplayClass'>\n";
+        while($winName = $winNames->fetch_object())
+        {
+            echo "<li>".$winName->Name."</li>\n";
         }
         echo "</ul>";
-        echo "<button onclick='showWinners()'>Genomför lottning</button>";
-
-    }
-    echo "<h1 class='$winDisplayClass'>Valda personer</h1>\n";
-    $idStr = array();
-    foreach ($winners as $winner) {
-        $idStr[] = "id = $winner";
-    }
-    $totStr = implode(" OR ", $idStr);
-
-    $winNames = $sql_connection->query("SELECT * FROM candidates WHERE $totStr");
-    echo "<ul class='$winDisplayClass'>\n";
-    while($winName = $winNames->fetch_object())
-    {
-        echo "<li>".$winName->Name."</li>\n";
-    }
-    echo "</ul>";
+    }    
     echo "</div>";
+
 
     echo "<div id='nodeSpace'>";
     flush();
@@ -620,7 +629,13 @@ function getPreviouslyElected($node){
     if($node == $firstNode)
         return $allElectedInBranch;
 
-    $currentNode = $sql_connection->query("SELECT parentNode as pID FROM calcRelations WHERE childNode=$node")->fetch_object()->pID;
+    $getCurrentNode = $sql_connection->query("SELECT parentNode as pID FROM calcRelations WHERE childNode=$node");
+    if(!$getCurrentNode->num_rows == 1)
+    {
+        die('KAOS! Kunde inte hitta parentNode till nod: '.$node);
+    }
+    
+    $currentNode = $getCurrentNode->fetch_object()->pID;
     $onANode = true;
 
     while($onANode)
@@ -912,6 +927,12 @@ function singleWinner()
     global $sql_connection;
     global $election;
     return (1 == $sql_connection->query("SELECT count(id) as numWin FROM calcNodes WHERE Election='$election' AND endNode = 1")->fetch_object()->numWin);
+}
+function noWinner()
+{
+    global $sql_connection;
+    global $election;
+    return (0 == $sql_connection->query("SELECT count(id) as numWin FROM calcNodes WHERE Election='$election' AND endNode = 1")->fetch_object()->numWin);
 }
 function getProbabilityForCandidateAsWinner($Candidate)
 {

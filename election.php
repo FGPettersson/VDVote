@@ -20,9 +20,7 @@ if(isset($election))
         $electionFail = true;
         $title = "Kunde inte hitta valt val";        
     }
-
 }
-
 
 echo "
 
@@ -30,6 +28,7 @@ echo "
         <div class='myList'>
             <h2>Kandidater</h2>
             <input type='text' id='newCandidate' placeholder='Lägg till ny kandidat' />
+            <a href='#' class='addLink' onclick='addNewCandidate()'></a>
             <ul id='runnerList' class='sortable'>
             </ul>
         </div>
@@ -182,21 +181,24 @@ function removeRunner(cID)
 $('#newCandidate').keypress(function (e) {
     if (e.which == 13) {
         e.preventDefault();
-        var eID = <? echo $election ?>;
-        var Name = $('#newCandidate').val();
-        var addC = $.post('./ajax/addCandidate.php', { Name: Name });
-        addC.done(function(xml){
-            var cID = $(xml).find("CandidateID").text();
-            var addR = $.post('./ajax/runForElection.php', { Election: eID, Candidate: cID });
-            addR.done(function(){
-                getRunners();
-            });
-        });
-        $('#newCandidate').val("");
-        getRunners();
+        addNewCandidate()
     }
 });
-
+function addNewCandidate()
+{
+    var eID = <? echo $election ?>;
+    var Name = $('#newCandidate').val();
+    var addC = $.post('./ajax/addCandidate.php', { Name: Name });
+    addC.done(function(xml){
+        var cID = $(xml).find("CandidateID").text();
+        var addR = $.post('./ajax/runForElection.php', { Election: eID, Candidate: cID });
+        addR.done(function(){
+            getRunners();
+        });
+    });
+    $('#newCandidate').val("");
+    getRunners();
+}
 
 $('.sortable').sortable();
 
